@@ -1,4 +1,4 @@
-#include "Player.h"
+﻿#include "Player.h"
 #include "DD.h"
 
 enum MouseButtonValue
@@ -12,7 +12,7 @@ enum MouseButtonValue
 };
 
 Player::Player(std::wstring dllName):
-	m_dllName(dllName)
+    m_dllName(dllName), m_block(50, 50, Qt::blue)
 {
 	m_Driver = new CDD();
 }
@@ -70,4 +70,53 @@ void Player::KeyClick(int keyValue)
     m_Driver->DD_key(keyValue, 1);
     Sleep(10);
     m_Driver->DD_key(keyValue, 2);
+}
+
+void Player::Move(MoveDirection direct)
+{
+    int key = -1;
+    if (direct == MoveDirection::UP)
+    {
+        key = GameKey_Up;
+    }
+    else if (direct == MoveDirection::DOWN)
+    {
+        key = GameKey_Down;
+    }
+    else if(direct == MoveDirection::LEFT)
+    {
+        key = GameKey_Left;
+    }
+    else if(direct == MoveDirection::RIGHT)
+    {
+        key = GameKey_Right;
+    }
+    m_Driver->DD_key(key, 1);
+    Sleep(10);
+    m_Driver->DD_key(key, 2);
+    Sleep(10);
+    m_Driver->DD_key(key, 1);
+    Sleep(500);
+    m_Driver->DD_key(key, 2);
+}
+
+void Player::MoveToEnemy(const QPoint &enemyPt)
+{
+    if (this->x < enemyPt.x() - m_block.Width)
+    {
+        Move(MoveDirection::RIGHT);
+    }
+    else if (this->x > enemyPt.x() + m_block.Width)
+    {
+        Move(MoveDirection::LEFT);
+    }
+
+    if (this->y < enemyPt.y() - m_block.Height)
+    {
+        Move(MoveDirection::DOWN);
+    }
+    else if (this->y > enemyPt.y() + m_block.Height)
+    {
+        Move(MoveDirection::UP);
+    }
 }

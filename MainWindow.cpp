@@ -8,8 +8,6 @@
 
 #include <QKeyEvent>
 
-#include "InputDriver/Player.h"
-
 using namespace std;
 
 const int InitSuccess = 1;
@@ -21,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    std::wstring path = L"G:/master/DD94687.64.dll";
+    std::wstring path = L"F:/QtSpace/GameHelper/InputDriver/DD94687.64.dll";
     m_player = new Player(path);
 
     int result = m_player->Initialize();
@@ -62,18 +60,6 @@ void MainWindow::on_pushButton_clicked()
     if(FindWindowHwnd(L"地下城与勇士"))
     {
         GrabGameScreen(m_gameHwnd);
-        for (int i = 0; i < 100; ++i)
-        {
-            m_player->KeyClick(GameKey_Down);
-        }
     }
 }
 
-void MainWindow::keyPressEvent(QKeyEvent *event)
-{
-    if(event->key() == Qt::Key_Down)
-    {
-        qDebug() << "Down";
-    }
-    return QWidget::keyPressEvent(event);
-}

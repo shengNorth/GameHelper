@@ -2,12 +2,22 @@
 #define INPUT_DRIVER_H
 
 #include <string>
+#include <QPoint>
+#include <QColor>
 
 enum MouseButtonType
 {
 	MouseButtonLeft = 0,
 	MouseButtonMid = 1,
 	MouseButtonRight = 2
+};
+
+enum MoveDirection
+{
+    UP = 0,
+    DOWN = 1,
+    LEFT = 2,
+    RIGHT = 3
 };
 
 enum GameKey
@@ -37,6 +47,19 @@ enum GameKey
     GameKey_Right = 712,
 };
 
+struct ColorBlock
+{
+    int Width;
+    int Height;
+    QColor Color;
+
+    ColorBlock(int width, int height, QColor color):
+        Width(width), Height(height), Color(color)
+    {
+
+    }
+};
+
 class CDD;
 class Player
 {
@@ -49,9 +72,28 @@ public:
     bool MouseClick(MouseButtonType type);
 	void MouseMove(int x, int y);
     void KeyClick(int keyValue);
+
+    /**
+     * @brief MoveClick 控制角色移动,
+     */
+    void Move(MoveDirection direct);
+
+    /**
+     * @brief MoveTo    跑向怪物坐标
+     * @param enemyPt   怪物坐标
+     */
+    void MoveToEnemy(const QPoint& enemyPt);
 private:
 	CDD* m_Driver;
     std::wstring m_dllName;
+
+private:
+    //角色在图像中的坐标
+    int x;
+    int y;
+
+    //角色的色块
+    ColorBlock  m_block;
 };
 
 #endif // INPUT_DRIVER_H
